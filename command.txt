@@ -1,0 +1,2 @@
+composer create-project codeigniter4/appstarter:4.4.8 ci4_jwt
+composer require firebase/php-jwt
