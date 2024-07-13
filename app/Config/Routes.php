@@ -16,4 +16,8 @@ $routes->group('/api', ['namespace' => 'App\Controllers\Api'], function ($routes
     $routes->group('/', ['namespace' => 'App\Controllers\Api', 'filter' => 'App\Filters\AuthFilter:administrator'], function ($routes) {
         $routes->resource('users', ['controller' => 'UserController']);
     });
+
+    $routes->group('/', ['namespace' => 'App\Controllers\Api', 'filter' => 'App\Filters\AuthFilter:administrator,member'], function ($routes) {
+        $routes->resource('products', ['controller' => 'ProductController']);
+    });
 });
