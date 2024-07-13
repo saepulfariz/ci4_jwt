@@ -12,4 +12,6 @@ $routes->group('/api', ['namespace' => 'App\Controllers\Api'], function ($routes
 
     $routes->post('login', 'AuthController::login');
     $routes->post('refresh-token', 'AuthController::refreshToken');
+
+    $routes->resource('users', ['controller' => 'UserController']);
 });

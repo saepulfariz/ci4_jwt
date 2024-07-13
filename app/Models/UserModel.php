@@ -32,8 +32,8 @@ class UserModel extends BaseModel
   protected $deletedField  = 'deleted_at';
 
   // Validation
-  // protected $validationRules      = [];
-  // protected $validationMessages   = [];
+  protected $validationRules      = [];
+  protected $validationMessages   = [];
   protected $skipValidation       = false;
   protected $cleanValidationRules = true;
 
@@ -56,21 +56,24 @@ class UserModel extends BaseModel
     return $this->db->table('roles')->get()->getResultArray();
   }
 
-  protected $validationRules = [
-    'username' => 'required|alpha_numeric_space|min_length[3]|is_unique[users.username]',
-    'password' => 'required|min_length[8]',
-  ];
+  // protected $validationRules = [
+  //   'username' => 'required|alpha_numeric_space|min_length[3]|is_unique[users.username]',
+  //   'password' => 'required|min_length[8]',
+  //   'email' => 'required|is_unique[users.email]|valid_email',
+  //   'name' => 'required',
+  //   'role_id' => 'required',
+  // ];
 
-  protected $validationMessages = [
-    'username' => [
-      'required' => 'Username is required',
-      'alpha_numeric_space' => 'Username can only contain alphanumeric characters and spaces',
-      'min_length' => 'Username must be at least 3 characters long',
-      'is_unique' => 'Username already exists'
-    ],
-    'password' => [
-      'required' => 'Password is required',
-      'min_length' => 'Password must be at least 8 characters long'
-    ]
-  ];
+  // protected $validationMessages = [
+  //   'username' => [
+  //     'required' => 'Username is required',
+  //     'alpha_numeric_space' => 'Username can only contain alphanumeric characters and spaces',
+  //     'min_length' => 'Username must be at least 3 characters long',
+  //     'is_unique' => 'Username already exists'
+  //   ],
+  //   'password' => [
+  //     'required' => 'Password is required',
+  //     'min_length' => 'Password must be at least 8 characters long'
+  //   ]
+  // ];
 }
