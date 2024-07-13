@@ -13,15 +13,24 @@ class UserController extends ResourceController
     public function index()
     {
         $users = $this->model->findAll();
-        $this->model = new UserModel();
-        return $this->respond($users);
+        $data = [
+            'status' => 200,
+            'message' => 'Get all users.',
+            'data' => $users
+        ];
+        return $this->respond($data, 200);
     }
 
     public function show($id = null)
     {
         $user = $this->model->find($id);
         if ($user) {
-            return $this->respond($user);
+            $data = [
+                'status' => 200,
+                'message' => 'Get user by id.',
+                'data' => $user
+            ];
+            return $this->respond($data, 200);
         } else {
             return $this->failNotFound('User not found');
         }
@@ -59,6 +68,12 @@ class UserController extends ResourceController
 
         try {
             if ($this->model->insert($data)) {
+                $last = $this->model->orderBy('id', 'DESC')->first();
+                $data = [
+                    'status' => 201,
+                    'message' => 'Successfully created.',
+                    'data' => $last
+                ];
                 return $this->respondCreated($data);
             } else {
                 return $this->failValidationErrors($this->model->errors());
@@ -113,7 +128,13 @@ class UserController extends ResourceController
 
 
         if ($this->model->update($id, $data)) {
-            return $this->respond($data);
+            $last = $this->model->find($id);
+            $data = [
+                'status' => 200,
+                'message' => 'Successfully updated.',
+                'data' => $last
+            ];
+            return $this->respond($data, 200);
         } else {
             return $this->failValidationErrors($this->model->errors());
         }
@@ -121,9 +142,21 @@ class UserController extends ResourceController
 
     public function delete($id = null)
     {
-        if ($this->model->delete($id)) {
-            return $this->respondDeleted(['id' => $id]);
+        $user = $this->model->find($id);
+        if ($user) {
+            $this->model->delete($id);
+            $data = [
+                'status' => 200,
+                'message' => 'Successfully deleted.',
+                'data' => ['id' => $id]
+            ];
+            return $this->respondDeleted($data);
         } else {
+            // $data = [
+            //     'status' => 404,
+            //     'message' => 'User not found',
+            // ];
+            // return $this->respond($data, 404);
             return $this->failNotFound('User not found');
         }
     }
