@@ -14,6 +14,20 @@ class ProductModel extends BaseModel
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
+    // Callbacks
+    protected $allowCallbacks = true;
+    protected $beforeInsert   = ['beforeInsert'];
+    protected $afterInsert    = [];
+    protected $beforeUpdate   = ['beforeUpdate'];
+    protected $afterUpdate    = [];
+    protected $beforeFind     = [];
+    protected $afterFind      = [];
+    protected $beforeDelete   = ['beforeDelete'];
+    protected $afterDelete    = [];
+
+    public $logName = false;
+    public $logId = true;
+
     protected $validationRules = [
         'name' => 'required|min_length[3]|max_length[255]',
         'description' => 'permit_empty|max_length[500]',
