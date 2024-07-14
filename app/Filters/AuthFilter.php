@@ -28,7 +28,7 @@ class AuthFilter implements FilterInterface
             $userId = $decoded->data->id;
 
             $userModel = new UserModel();
-            $user = $userModel->select('users.*, title')->join('roles', 'users.role_id = roles.id')->find($userId);
+            $user = $userModel->select('users.*, title as role')->join('roles', 'users.role_id = roles.id')->find($userId);
 
             if (!$user) {
                 return Services::response()
@@ -40,7 +40,7 @@ class AuthFilter implements FilterInterface
             if (!empty($arguments)) {
                 // $allowedRoles = explode('|', $arguments[0]);
                 $allowedRoles = $arguments;
-                if (!in_array(strtolower($user['title']), $allowedRoles)) {
+                if (!in_array(strtolower($user['role']), $allowedRoles)) {
                     return Services::response()
                         ->setJSON(['status' => 403, 'message' => 'Access forbidden for your role'])
                         ->setStatusCode(ResponseInterface::HTTP_FORBIDDEN);

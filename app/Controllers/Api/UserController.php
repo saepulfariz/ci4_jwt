@@ -12,7 +12,7 @@ class UserController extends ResourceController
 
     public function index()
     {
-        $users = $this->model->findAll();
+        $users = $this->model->select('users.*, title as role')->join('roles', 'users.role_id = roles.id')->findAll();
         $data = [
             'status' => 200,
             'message' => 'Get all users.',
@@ -23,7 +23,7 @@ class UserController extends ResourceController
 
     public function show($id = null)
     {
-        $user = $this->model->find($id);
+        $user = $this->model->select('users.*, title as role')->join('roles', 'users.role_id = roles.id')->find($id);
         if ($user) {
             $data = [
                 'status' => 200,
@@ -157,6 +157,23 @@ class UserController extends ResourceController
             //     'message' => 'User not found',
             // ];
             // return $this->respond($data, 404);
+            return $this->failNotFound('User not found');
+        }
+    }
+
+    public function me()
+    {
+        $id = logged('id');
+        $user = $this->model->select('users.*, title as role')->join('roles', 'users.role_id = roles.id')->find($id);
+        if ($user) {
+            unset($user['password']);
+            $data = [
+                'status' => 200,
+                'message' => 'Get user by login.',
+                'data' => $user
+            ];
+            return $this->respond($data, 200);
+        } else {
             return $this->failNotFound('User not found');
         }
     }
