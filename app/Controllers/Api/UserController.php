@@ -177,4 +177,15 @@ class UserController extends ResourceController
             return $this->failNotFound('User not found');
         }
     }
+
+    public function roles()
+    {
+        $roles = $this->model->getRoles();
+        $data = [
+            'status' => 200,
+            'message' => 'Get all roles.',
+            'data' => $roles
+        ];
+        return $this->respond($data, 200);
+    }
 }
