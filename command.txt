@@ -22,3 +22,7 @@ vendor\bin\phpunit
 vendor\bin\phpunit --list-tests
 
 vendor\bin\phpunit --list-suites
+
+vendor\bin\phpunit --testsuite myApp
+
+vendor\bin\phpunit --testsuite myApp --list-tests
