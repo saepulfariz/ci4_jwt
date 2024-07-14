@@ -1,2 +1,24 @@
 composer create-project codeigniter4/appstarter:4.4.8 ci4_jwt
 composer require firebase/php-jwt
+
+
+composer require --dev phpunit/phpunit ^9
+
+Problem 1
+    - Root composer.json requires phpunit/phpunit 9 -> satisfiable by phpunit/phpunit[9.0.0].
+    - phpunit/phpunit 9.0.0 requires php ^7.3 -> your php version (8.2.4) does not satisfy that requirement.
+
+composer require --dev phpunit/phpunit
+
+phpunit.xml.dist rename jadi phpunit.xml
+
+linux
+vendor/bin/phpunit
+
+windows
+vendor\bin\phpunit
+
+
+vendor\bin\phpunit --list-tests
+
+vendor\bin\phpunit --list-suites
