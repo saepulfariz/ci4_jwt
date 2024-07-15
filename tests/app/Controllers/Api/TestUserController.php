@@ -1,0 +1,74 @@
+<?php
+
+namespace Tests\Feature;
+
+
+use CodeIgniter\Test\CIUnitTestCase;
+use CodeIgniter\Test\FeatureTestTrait;
+use CodeIgniter\Test\DatabaseTestTrait;
+
+
+class TestUserController extends CIUnitTestCase
+{
+    // use DatabaseTestTrait; disabled ini jadi gak minta migrate dan seed
+    use FeatureTestTrait;
+
+    // protected $migrate     = false;
+
+    // protected $seed     = false;
+
+
+    private $accessToken;
+
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $response = $this->post('/api/login', [
+            'username' => 'admin',
+            'password' => '123',
+        ]);
+
+        $response->assertStatus(200);
+
+        // $response->assertJSONFragment(['data' => [
+        //     'accessToken' => $accessToken,
+        // ]]);
+
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
+        $accessToken = $data['data']['accessToken'];
+        $refreshToken = $data['data']['refreshToken'];
+
+        $this->accessToken = $accessToken;
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
+    public function testCreate()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/users', [
+            'name' => 'New User',
+            'username' => 'newuser',
+            'email' => 'newuser@example.com',
+            'password' => 'password',
+            'role_id' => '2',
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJSONFragment(['message' => 'Successfully created.']);
+
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
+    }
+}

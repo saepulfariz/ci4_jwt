@@ -17,6 +17,7 @@ class TestAuthController extends CIUnitTestCase
     protected $migrate     = true;
     // protected $migrate     = false;
     protected $migrateOnce = false;
+    // protected $refresh     = true;
     protected $refresh     = true;
     // protected $namespace   = 'Tests\Support';
     protected $namespace   = 'App';
@@ -24,7 +25,7 @@ class TestAuthController extends CIUnitTestCase
 
     // For Seeds
     protected $seedOnce = false; // gak berdampak
-    // protected $seedOnce = true;
+    // protected $seedOnce = true; // seed pertama 
     // protected $seed     = 'All';
     // protected $basePath = 'tests/_support/Database';
 
