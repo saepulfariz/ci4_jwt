@@ -130,4 +130,21 @@ class TestUserController extends CIUnitTestCase
             'name' => 'New User Updated'
         ]]);
     }
+
+    public function testDelete()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->delete('api/users/' . getenv('userId'));
+
+        $response->assertStatus(200);
+        $response->assertJSONFragment(['message' => 'Successfully deleted.']);
+        $response->assertJSONFragment(['data' => [
+            'id' => getenv('userId')
+        ]]);
+    }
 }
