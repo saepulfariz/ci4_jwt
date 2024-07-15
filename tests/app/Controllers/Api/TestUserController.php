@@ -105,4 +105,29 @@ class TestUserController extends CIUnitTestCase
             'id' => $userId
         ]]);
     }
+
+    public function testUpdate()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $data = [
+            'name' => 'New User Updated',
+            'username' => 'newuser',
+            'email' => 'newuser@example.com',
+            'password' => 'password',
+            'role_id' => '2',
+        ];
+
+        $response = $this->withHeaders($headers)->withBodyFormat('json')->put('api/users/' . getenv('userId'), $data);
+
+        $response->assertStatus(200);
+        $response->assertJSONFragment(['message' => 'Successfully updated.']);
+        $response->assertJSONFragment(['data' => [
+            'name' => 'New User Updated'
+        ]]);
+    }
 }
