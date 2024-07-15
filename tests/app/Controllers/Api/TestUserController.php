@@ -70,5 +70,39 @@ class TestUserController extends CIUnitTestCase
 
         $data = $response->getJSON();
         $data = json_decode($data, true);
+
+        $userId = $data['data']['id'];
+        putenv("userId=$userId");
+    }
+
+    public function testIndex()
+    {
+        // $accessToken = getenv('accessToken');
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->get('/api/users');
+
+        $response->assertStatus(200);
+    }
+
+    public function testShow()
+    {
+        $accessToken = $this->accessToken;
+        $userId = getenv('userId');
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->get('/api/users/' . $userId);
+
+        $response->assertStatus(200);
+        $response->assertJSONFragment(['data' => [
+            'id' => $userId
+        ]]);
     }
 }
