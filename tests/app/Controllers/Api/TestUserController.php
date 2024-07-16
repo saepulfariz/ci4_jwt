@@ -60,6 +60,7 @@ class TestUserController extends CIUnitTestCase
         $response = $this->withHeaders($headers)->post('api/users', [
             'name' => 'New User',
             'username' => 'newuser',
+
             'email' => 'newuser@example.com',
             'password' => 'password',
             'role_id' => '2',
@@ -146,5 +147,35 @@ class TestUserController extends CIUnitTestCase
         $response->assertJSONFragment(['data' => [
             'id' => getenv('userId')
         ]]);
+    }
+
+    public function testMemberIndex()
+    {
+
+        $response = $this->post('/api/login', [
+            'username' => 'member',
+            'password' => '123',
+        ]);
+
+        $response->assertStatus(200);
+
+        // $response->assertJSONFragment(['data' => [
+        //     'accessToken' => $accessToken,
+        // ]]);
+
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
+        $accessToken = $data['data']['accessToken'];
+        $refreshToken = $data['data']['refreshToken'];
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->get('/api/users');
+
+        $response->assertStatus(403);
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
     }
 }
