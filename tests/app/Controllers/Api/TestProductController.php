@@ -80,4 +80,21 @@ class TestProductController extends CIUnitTestCase
 
         $response->assertStatus(200);
     }
+
+    public function testShow()
+    {
+        $accessToken = $this->accessToken;
+        $productId = getenv('productId');
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->get('/api/products/' . $productId);
+
+        $response->assertStatus(200);
+        $response->assertJSONFragment(['data' => [
+            'id' => $productId
+        ]]);
+    }
 }
