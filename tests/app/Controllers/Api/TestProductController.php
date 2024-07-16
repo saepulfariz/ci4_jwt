@@ -120,4 +120,21 @@ class TestProductController extends CIUnitTestCase
             'name' => 'product1 Updated'
         ]]);
     }
+
+    public function testDelete()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->delete('api/products/' . getenv('productId'));
+
+        $response->assertStatus(200);
+        $response->assertJSONFragment(['message' => 'Successfully deleted.']);
+        $response->assertJSONFragment(['data' => [
+            'id' => getenv('productId')
+        ]]);
+    }
 }
