@@ -97,4 +97,27 @@ class TestProductController extends CIUnitTestCase
             'id' => $productId
         ]]);
     }
+
+    public function testUpdate()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $data = [
+            'name' => 'product1 Updated',
+            'description' => 'product1',
+            'price' => '2000',
+        ];
+
+        $response = $this->withHeaders($headers)->withBodyFormat('json')->put('api/products/' . getenv('productId'), $data);
+
+        $response->assertStatus(200);
+        $response->assertJSONFragment(['message' => 'Successfully updated.']);
+        $response->assertJSONFragment(['data' => [
+            'name' => 'product1 Updated'
+        ]]);
+    }
 }
