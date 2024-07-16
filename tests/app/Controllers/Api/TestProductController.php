@@ -66,4 +66,18 @@ class TestProductController extends CIUnitTestCase
         $productId = $data['data']['id'];
         putenv("productId=$productId");
     }
+
+    public function testIndex()
+    {
+        // $accessToken = getenv('accessToken');
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->get('/api/products');
+
+        $response->assertStatus(200);
+    }
 }
