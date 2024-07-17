@@ -213,6 +213,13 @@ class UserController extends ResourceController
             $img->move($this->dir, $newName);
 
             $userId = logged('id');
+
+            $imageOld = $this->model->find($userId)['image'];
+            if ($imageOld != 'user.png') {
+                @unlink($this->dir . '/' . $imageOld);
+            }
+
+
             $data = [
                 'image' => $newName
             ];

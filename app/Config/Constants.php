@@ -25,6 +25,28 @@ defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
  */
 defined('COMPOSER_PATH') || define('COMPOSER_PATH', ROOTPATH . 'vendor/autoload.php');
 
+if (getenv('app_baseURL') || getenv('app.baseURL')) {
+    $base = (getenv('app_baseURL')) ? getenv('app_baseURL') : getenv('app.baseURL');
+    defined('BASE') || define('BASE', $base);
+    defined('SERVERME') || define('SERVERME', $base);
+} else {
+    if (isset($_SERVER['HTTP_HOST'])) {
+        $explodeFolder = explode('/index.php', $_SERVER['SCRIPT_NAME'])[0];
+        $cekPublicFolder = explode('/public', $explodeFolder);
+        $cekPort = ($_SERVER['SERVER_PORT'] != 80) ?  $explodeFolder : ((count($cekPublicFolder) == 1) ? $explodeFolder . ''  : $cekPublicFolder[0]);
+        $folderProject = $cekPort;
+
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? 'https://' . $_SERVER['HTTP_HOST'] . $folderProject : 'http://' . $_SERVER['HTTP_HOST'] . $folderProject;
+        defined('BASE') || define('BASE', $protocol);
+
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? 'https://' . $_SERVER['HTTP_HOST'] : 'http://' . $_SERVER['HTTP_HOST'];
+        defined('SERVERME') || define('SERVERME', $protocol);
+    } else {
+        defined('BASE') || define('BASE', '');
+        defined('SERVERME') || define('SERVERME', '');
+    }
+}
+
 /*
  |--------------------------------------------------------------------------
  | Timing Constants
