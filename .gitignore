@@ -127,3 +127,4 @@ build/
 /.phpunit.*.cache
 
 composer.lock
+/public/assets/uploads/users/
