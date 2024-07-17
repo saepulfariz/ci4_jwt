@@ -196,4 +196,21 @@ class TestUserController extends CIUnitTestCase
         $data = json_decode($data, true);
         $response->assertStatus(401);
     }
+
+    public function testUploadImageInvalid()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/user/upload-image', [
+            'image' => '',
+        ]);
+
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
+        $response->assertStatus(400);
+    }
 }
