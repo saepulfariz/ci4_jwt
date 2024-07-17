@@ -185,4 +185,15 @@ class TestUserController extends CIUnitTestCase
         $data = $response->getJSON();
         $data = json_decode($data, true);
     }
+
+    public function testUploadImageNoLogin()
+    {
+        $response = $this->post('api/user/upload-image', [
+            'image' => '',
+        ]);
+
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
+        $response->assertStatus(401);
+    }
 }
