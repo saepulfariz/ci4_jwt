@@ -15,6 +15,8 @@ $routes->group('/api', ['namespace' => 'App\Controllers\Api'], function ($routes
 
     $routes->get('me', 'UserController::me', ['filter' => 'App\Filters\AuthFilter']);
 
+    $routes->post('user/upload-image', 'UserController::uploadImage', ['filter' => 'App\Filters\AuthFilter']);
+
     $routes->group('/', ['namespace' => 'App\Controllers\Api', 'filter' => 'App\Filters\AuthFilter:administrator'], function ($routes) {
         $routes->get('roles', 'UserController::roles');
         $routes->resource('users', ['controller' => 'UserController']);

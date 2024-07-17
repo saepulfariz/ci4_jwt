@@ -9,6 +9,7 @@ class UserController extends ResourceController
 {
     protected $modelName = 'App\Models\UserModel';
     protected $format    = 'json';
+    private $dir = 'public/assets/uploads/users';
 
     public function index()
     {
@@ -187,5 +188,47 @@ class UserController extends ResourceController
             'data' => $roles
         ];
         return $this->respond($data, 200);
+    }
+
+    public function uploadImage()
+    {
+        $validationRule = [
+            'image' => [
+                'label' => 'Image File',
+                'rules' => 'uploaded[image]'
+                    . '|is_image[image]'
+                    . '|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp]'
+                    . '|max_size[image,4096]', // 4MB
+            ],
+        ];
+
+        if (!$this->validate($validationRule)) {
+            return $this->fail($this->validator->getErrors());
+        }
+
+        $img = $this->request->getFile('image');
+        if (!$img->hasMoved()) {
+            $newName = $img->getRandomName();
+            // WRITEPATH . 'uploads'
+            $img->move($this->dir, $newName);
+
+            $userId = logged('id');
+            $data = [
+                'image' => $newName
+            ];
+            $this->model->update($userId, $data);
+
+            $data = [
+                'status' => 200,
+                'message' => 'Image uploaded successfully',
+                'data' => [
+                    'image' => $newName
+                ]
+            ];
+
+            return $this->respond($data, 200);
+        }
+
+        return $this->fail('The file has already been moved.');
     }
 }
