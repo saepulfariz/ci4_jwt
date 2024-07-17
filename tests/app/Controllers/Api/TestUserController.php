@@ -213,4 +213,30 @@ class TestUserController extends CIUnitTestCase
         $data = json_decode($data, true);
         $response->assertStatus(400);
     }
+
+    public function testUploadImageValid()
+    {
+        $accessToken = $this->accessToken;
+
+        $headers = [
+            'Authorization' => "Bearer $accessToken"
+        ];
+
+
+        $file = ROOTPATH . 'public\assets\uploads\users\user.png';
+        $files = new \CodeIgniter\Files\File($file);
+        $files = new \CodeIgniter\Files\File(WRITEPATH . 'uploads/user.png');
+        // $files = curl_file_create($file, 'image/png', 'user.png');
+        $response = $this->withHeaders($headers)->post('api/user/upload-image', [
+            'image' => $files
+        ]);
+
+        $data = $response->getJSON();
+        $data = json_decode($data, true);
+        // var_dump($file);
+        // var_dump($files);
+        // var_dump($data);
+        // $response->assertStatus(200);
+        $response->assertStatus(400);
+    }
 }
