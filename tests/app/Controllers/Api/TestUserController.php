@@ -49,6 +49,13 @@ class TestUserController extends CIUnitTestCase
         parent::tearDown();
     }
 
+    public function testNoLogin()
+    {
+        $response = $this->get('/api/users');
+
+        $response->assertStatus(401);
+    }
+
     public function testCreate()
     {
         $accessToken = $this->accessToken;
