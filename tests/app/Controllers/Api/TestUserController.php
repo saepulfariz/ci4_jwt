@@ -219,7 +219,8 @@ class TestUserController extends CIUnitTestCase
         $accessToken = $this->accessToken;
 
         $headers = [
-            'Authorization' => "Bearer $accessToken"
+            'Authorization' => "Bearer $accessToken",
+            'Content-Type' => 'multipart/form-data',
         ];
 
 
@@ -227,7 +228,27 @@ class TestUserController extends CIUnitTestCase
         $files = new \CodeIgniter\Files\File($file);
         $files = new \CodeIgniter\Files\File(WRITEPATH . 'uploads/user.png');
         // $files = curl_file_create($file, 'image/png', 'user.png');
-        $response = $this->withHeaders($headers)->post('api/user/upload-image', [
+        // $response = $this->withHeaders($headers)->post('api/user/upload-image', [
+        //     'image' => $files
+        // ]);
+
+        // Path to the dummy image file
+        // $filePath = WRITEPATH . 'uploads/dummy_image.jpg';
+        $filePath = WRITEPATH . 'uploads/user.png';
+
+        // Simulate file upload
+        // $_FILES['image'] = [
+        //     'name' => 'user.png',
+        //     'type' => 'image/jpeg',
+        //     'tmp_name' => $filePath,
+        //     'error' => UPLOAD_ERR_OK,
+        //     'size' => filesize($filePath),
+        // ];
+
+
+        $_FILES['image'] = new \CodeIgniter\Files\File(WRITEPATH . 'uploads/user.png');
+
+        $response = $this->withHeaders($headers)->call('post', 'api/user/upload-image', [
             'image' => $files
         ]);
 
