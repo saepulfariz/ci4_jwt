@@ -10,6 +10,7 @@ $routes->get('/', 'Home::index');
 
 $routes->group('/api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
 
+	$routes->get('login', 'AuthController::login');
     $routes->post('login', 'AuthController::login');
     $routes->post('refresh-token', 'AuthController::refreshToken');
 
