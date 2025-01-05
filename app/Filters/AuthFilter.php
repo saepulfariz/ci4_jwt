@@ -14,6 +14,7 @@ class AuthFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
+        header("Access-Control-Allow-Origin: *");
         $authHeader = $request->getHeader('Authorization');
         if (!$authHeader) {
             return Services::response()
